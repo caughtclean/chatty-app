@@ -2,6 +2,7 @@
 
 const express = require('express');
 const SocketServer = require('ws').Server;
+const uuid = require('node-uuid');
 
 // Set the port to 4000
 const PORT = 4000;
@@ -14,17 +15,21 @@ const server = express()
 
 // Create the WebSockets server
 const wss = new SocketServer({ server });
+wss.broadcast = function broadcast(message) {
+  wss.clients.forEach(function each(socket) {
+    socket.send(JSON.stringify(message));
+  });
+}
 
 wss.on('connection', (socket) => {
   console.log('Client connected');
 
-    setTimeout(() => {
-    socket.send(JSON.stringify({ type: "hello"}))
-  }, 2000)
-
-    socket.on('message', (message) => {
+  socket.on('message', (message) => {
     message = JSON.parse(message);
-    console.log('Got message', message)
+    message.id = uuid.v4()
+    wss.broadcast(message);
+
+    console.log('Got message', message);
   });
 
   socket.on('close', () => console.log('Client disconnected'));
