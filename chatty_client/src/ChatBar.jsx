@@ -4,7 +4,8 @@ class ChatBar extends Component {
     super(props);
     this.state = {
       value: "",
-      user: props.currentUser
+      userInput: "",
+      user: ""
     };
 
 
@@ -27,19 +28,18 @@ class ChatBar extends Component {
      this.setState({value: event.target.value});
     }
 
-
-
-  handleSubmitUser(event) {
-    if (event.key === "Enter") {
-      this.props.sendUser(event.target.value);
-    }
-  }
-
   handleChangeUser(event) {
     console.log(event.target.value)
-    this.setState({user: event.target.value});
+    this.setState({userInput: event.target.value});
 
     }
+
+     handleSubmitUser(event) {
+    if (event.key === "Enter") {
+      this.setState({user: event.target.value});
+      this.props.sendUser(this.state.user);
+    }
+  }
 
   render() {
     console.log("Rendering ChatBar")
@@ -49,10 +49,10 @@ class ChatBar extends Component {
       <input
         id="username"
         type="text"
-        placeholder="Your Name (Optional)"
-        value={this.state.user}
+        value={this.state.userInput}
         onKeyPress={this.handleSubmitUser}
         onChange={this.handleChangeUser}
+        placeholder="Your Name (Optional)"
       />
       <input
         id="new-message"
@@ -68,8 +68,3 @@ class ChatBar extends Component {
   }
 }
 export default ChatBar;
-
-
-
-
-

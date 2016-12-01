@@ -6,7 +6,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: {name: "Bob"},
+      currentUser: this.props.user,
       messages: []
     };
 
@@ -21,7 +21,7 @@ class App extends Component {
   }
 
   sendUser(user) {
-    var user = {currentUser: user}
+    var user = this.state.currentUser
     this.socket.send(JSON.stringify(user))
   }
 
@@ -52,7 +52,7 @@ class App extends Component {
           messages={this.state.messages}
           />
         <ChatBar
-          currentUser={this.state.currentUser.name}
+          currentUser={this.state.currentUser}
           sendMessage={this.sendMessage}
           sendUser={this.sendUser}
           />
