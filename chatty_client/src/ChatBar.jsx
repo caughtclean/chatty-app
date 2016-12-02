@@ -28,18 +28,20 @@ class ChatBar extends Component {
      this.setState({value: event.target.value});
     }
 
-  handleChangeUser(event) {
+    handleSubmitUser(event) {
+    if (event.key === "Enter") {
+      this.setState({user: event.target.value});
+      this.props.sendUser(event.target.value);
+    }
+  }
+
+    handleChangeUser(event) {
     console.log(event.target.value)
     this.setState({userInput: event.target.value});
 
     }
 
-     handleSubmitUser(event) {
-    if (event.key === "Enter") {
-      this.setState({user: event.target.value});
-      this.props.sendUser(this.state.user);
-    }
-  }
+
 
   render() {
     console.log("Rendering ChatBar")

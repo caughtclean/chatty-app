@@ -6,9 +6,10 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: this.props.user,
+      currentUser: "",
       messages: []
     };
+
 
     this.sendMessage = this.sendMessage.bind(this)
     this.sendUser = this.sendUser.bind(this)
@@ -16,12 +17,12 @@ class App extends Component {
 
 
   sendMessage(chatinput, username) {
-    var message = {username: username, content: chatinput}
+    var message = {type: "newMessage",username: username, content: chatinput}
     this.socket.send(JSON.stringify(message))
   }
 
   sendUser(user) {
-    var user = this.state.currentUser
+    var user = {type: "newUser", user}
     this.socket.send(JSON.stringify(user))
   }
 
@@ -33,13 +34,17 @@ class App extends Component {
     console.log("conntected to socket server")
 
     this.socket.onmessage = (event) =>  {
-      console.log('event data', event.data);
-      const newMessages = JSON.parse(event.data);
-      const messages = this.state.messages.concat(newMessages);
-      this.setState({messages: messages});
-      this.setState({currentUser: {name: newMessages.username}})
-    };
-  }
+      const data = JSON.parse(event.data)
+      if (data.type === 'newMessage') {
+        const newMessages = JSON.parse(event.data)
+        const messages = this.state.messages.concat(newMessages)
+        this.setState({messages: messages})
+      }else {
+      const user = JSON.parse(event.data)
+      this.setState({messages: this.state.messages.concat(user)})
+      };
+    }
+}
 
   render() {
     console.log("Rendering <App/>");
@@ -50,6 +55,8 @@ class App extends Component {
         </nav>
         <MessageList
           messages={this.state.messages}
+          user={this.state.user}
+          currentUser={this.state.currentUser}
           />
         <ChatBar
           currentUser={this.state.currentUser}
