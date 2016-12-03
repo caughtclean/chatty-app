@@ -55,5 +55,11 @@ wss.on('connection', (socket) => {
     };
   });
 
-  socket.on('close', () => console.log('Client disconnected'));
+  socket.on('close', () => {
+    var clients = wss.clients.length
+    usersOnline = clients
+    wss.broadcast(usersOnline)
+    console.log('Client disconnected')
+  });
+
 });

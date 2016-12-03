@@ -20,7 +20,9 @@ class MessageList extends Component {
         }else {
           if (currentUserName != message.user) {
             return <div className="message system">
+
              {currentUserName} changed their name to {message.user}
+              }
             </div>
           }
         }
