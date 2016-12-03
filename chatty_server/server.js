@@ -21,11 +21,18 @@ wss.broadcast = function broadcast(message) {
   });
 }
 
+usersOnline = ""
+
 wss.on('connection', (socket) => {
+  var clients = wss.clients.length
+  usersOnline = clients
+  wss.broadcast(usersOnline)
   console.log('Client connected');
+  console.log(usersOnline);
+
 
   socket.on('message', (message_string) => {
-    debugger
+
     message = JSON.parse(message_string);
     user = message.user
     switch(message.type) {
@@ -50,4 +57,3 @@ wss.on('connection', (socket) => {
 
   socket.on('close', () => console.log('Client disconnected'));
 });
-

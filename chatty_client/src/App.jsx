@@ -7,7 +7,7 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: "",
-      messages: []
+      messages: [],
     };
 
 
@@ -39,12 +39,27 @@ class App extends Component {
         const newMessages = JSON.parse(event.data)
         const messages = this.state.messages.concat(newMessages)
         this.setState({messages: messages})
-      }else {
-      const user = JSON.parse(event.data)
-      this.setState({messages: this.state.messages.concat(user)})
+      }
+      if (data.type === 'newUser') {
+        const user = JSON.parse(event.data)
+        this.setState({messages: this.state.messages.concat(user)})
+     }
+      if (data > 0) {
+        this.setState({Usersonline: data})
+      }
+
+
+
+     // }else {
+
+      //   this.setState({Usersonline: data})
+
+      // }
+
+
       };
     }
-}
+
 
   render() {
     console.log("Rendering <App/>");
@@ -52,6 +67,9 @@ class App extends Component {
       <div>
         <nav>
           <h1>Chatty</h1>
+          <div>
+         Users Online: {this.state.Usersonline}
+          </div>
         </nav>
         <MessageList
           messages={this.state.messages}
